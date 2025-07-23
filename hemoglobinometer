@@ -1,0 +1,137 @@
+import json
+import os
+import random
+import time
+
+class HemoglobinMeter:
+    def __init__(self, filename="hemoglobin_readings.json"):
+        self.filename = filename
+        self.readings = []
+        self.load_readings()
+
+    def load_readings(self):
+        """Load previous hemoglobin readings from JSON file."""
+        if os.path.exists(self.filename):
+            try:
+                with open(self.filename, 'r') as file:
+                    self.readings = json.load(file)
+                print("Hemoglobin readings loaded successfully.")
+            except json.JSONDecodeError:
+                print("Error loading readings. Starting with an empty database.")
+                self.readings = []
+        else:
+            print("No readings file found. Starting with an empty database.")
+
+    def save_readings(self):
+        """Save hemoglobin readings to JSON file."""
+        try:
+            with open(self.filename, 'w') as file:
+                json.dump(self.readings, file, indent=4)
+            print("Readings saved successfully.")
+        except Exception as e:
+            print(f"Error saving readings: {e}")
+
+    def simulate_hemoglobin_reading(self):
+        """Simulate a hemoglobin reading (g/dL)."""
+        # Simulate realistic hemoglobin levels (8–20 g/dL)
+        return round(random.uniform(8.0, 20.0), 1)
+
+    def interpret_reading(self, hemoglobin_level, sex):
+        """Interpret hemoglobin level based on WHO reference ranges (g/dL)."""
+        sex = sex.lower()
+        if sex == "male":
+            if hemoglobin_level < 13.0:
+                return "Anemia (Low)"
+            elif 13.0 <= hemoglobin_level <= 17.0:
+                return "Normal"
+            else:
+                return "High"
+        elif sex == "female":
+            if hemoglobin_level < 12.0:
+                return "Anemia (Low)"
+            elif 12.0 <= hemoglobin_level <= 15.0:
+                return "Normal"
+            else:
+                return "High"
+        else:
+            return "Invalid sex specified"
+
+    def record_reading(self, patient_id, sex, hemoglobin_level=None):
+        """Record a new hemoglobin reading."""
+        sex = sex.lower()
+        if sex not in ["male", "female"]:
+            print("Invalid sex. Please specify 'male' or 'female'.")
+            return
+
+        if hemoglobin_level is None:
+            hemoglobin_level = self.simulate_hemoglobin_reading()
+        else:
+            try:
+                hemoglobin_level = float(hemoglobin_level)
+            except ValueError:
+                print("Invalid hemoglobin level. Please enter a number.")
+                return
+
+        status = self.interpret_reading(hemoglobin_level, sex)
+        reading = {
+            "patient_id": patient_id,
+            "sex": sex,
+            "hemoglobin_level": hemoglobin_level,
+            "unit": "g/dL",
+            "status": status,
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+        }
+        self.readings.append(reading)
+        self.save_readings()
+
+        print("\n--- Hemoglobin Reading ---")
+        print(f"Patient ID: {patient_id}")
+        print(f"Sex: {sex.capitalize()}")
+        print(f"Hemoglobin Level: {hemoglobin_level} g/dL")
+        print(f"Status: {status}")
+        print(f"Time: {reading['timestamp']}")
+        print("------------------------")
+
+    def view_readings(self):
+        """Display all hemoglobin readings."""
+        if not self.readings:
+            print("No hemoglobin readings available.")
+            return
+        print("\n--- Hemoglobin Reading History ---")
+        for reading in self.readings:
+            print(f"Patient ID: {reading['patient_id']}, Sex: {reading['sex'].capitalize()}, "
+                  f"Hemoglobin: {reading['hemoglobin_level']} g/dL, "
+                  f"Status: {reading['status']}, Time: {reading['timestamp']}")
+        print("--------------------------------")
+
+def main():
+    hemoglobin_meter = HemoglobinMeter()
+
+    while True:
+        print("\n=== Hemoglobin Fingerprick Simulator ===")
+        print("1. Record New Hemoglobin Reading")
+        print("2. View All Readings")
+        print("3. Exit")
+        choice = input("Enter your choice (1-3): ")
+
+        if choice == "1":
+            patient_id = input("Enter Patient ID: ")
+            sex = input("Enter sex (male/female): ")
+            hemoglobin_input = input("Enter hemoglobin level (g/dL) or press Enter to simulate: ")
+            if hemoglobin_input:
+                hemoglobin_meter.record_reading(patient_id, sex, hemoglobin_input)
+            else:
+                hemoglobin_meter.record_reading(patient_id, sex)
+
+        elif choice == "2":
+            hemoglobin_meter.view_readings()
+
+        elif choice == "3":
+            print("Exiting hemoglobin meter. Goodbye!")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
