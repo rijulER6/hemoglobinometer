@@ -1,0 +1,18 @@
+[
+    {
+        "patient_id": "P001",
+        "sex": "male",
+        "hemoglobin_level": 14.5,
+        "unit": "g/dL",
+        "status": "Normal",
+        "timestamp": "2025-07-24 01:49:00"
+    },
+    {
+        "patient_id": "P002",
+        "sex": "female",
+        "hemoglobin_level": 10.8,
+        "unit": "g/dL",
+        "status": "Anemia (Low)",
+        "timestamp": "2025-07-24 01:50:00"
+    }
+]
