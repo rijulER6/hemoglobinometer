@@ -1,0 +1,12 @@
+python hemoglobin_meter.py
+import bluetooth
+
+def read_hemoglobin():
+    bd_addr = "00:14:22:01:23:45"  # Replace with device address
+    port = 1
+    sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+    sock.connect((bd_addr, port))
+    data = sock.recv(1024).decode()  # Parse device-specific data
+    sock.close()
+    return float(data)
+
