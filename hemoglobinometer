@@ -107,18 +107,7 @@ class HemoglobinMeter:
 def main():
     hemoglobin_meter = HemoglobinMeter()
 
-    while True:
-        print("\n=== Hemoglobin Fingerprick Simulator ===")
-        print("1. Record New Hemoglobin Reading")
-        print("2. View All Readings")
-        print("3. Exit")
-        choice = input("Enter your choice (1-3): ")
-
-        if choice == "1":
-            patient_id = input("Enter Patient ID: ")
-            sex = input("Enter sex (male/female): ")
-            hemoglobin_input = input("Enter hemoglobin level (g/dL) or press Enter to simulate: ")
-            if hemoglobin_input:
+   
                 hemoglobin_meter.record_reading(patient_id, sex, hemoglobin_input)
             else:
                 hemoglobin_meter.record_reading(patient_id, sex)
