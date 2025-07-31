@@ -123,15 +123,4 @@ def main():
             else:
                 hemoglobin_meter.record_reading(patient_id, sex)
 
-        elif choice == "2":
-            hemoglobin_meter.view_readings()
-
-        elif choice == "3":
-            print("Exiting hemoglobin meter. Goodbye!")
-            break
-
-        else:
-            print("Invalid choice. Please try again.")
-
-if __name__ == "__main__":
-    main()
+     
