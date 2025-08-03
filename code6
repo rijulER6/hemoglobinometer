@@ -1,0 +1,14 @@
+def view_readings(self):
+        """Display all hemoglobin readings."""
+        if not self.readings:
+            print("No hemoglobin readings available.")
+            return
+        print("\n--- Hemoglobin Reading History ---")
+        for reading in self.readings:
+            print(f"Patient ID: {reading['patient_id']}, Sex: {reading['sex'].capitalize()}, "
+                  f"Hemoglobin: {reading['hemoglobin_level']} g/dL, "
+                  f"Status: {reading['status']}, Time: {reading['timestamp']}")
+        print("--------------------------------")
+
+def main():
+    hemoglobin_meter = HemoglobinMeter()
